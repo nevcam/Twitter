@@ -22,8 +22,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:refreshControl atIndex:0];
     
     // Get timeline
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
@@ -39,6 +44,28 @@
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
+}
+
+- (void)beginRefresh:(UIRefreshControl *)refreshControl {
+    
+    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
+        self.tweets = tweets;
+        if (tweets) {
+            NSLog(@"😎😎😎 Successfully loaded home timeline");
+            //            for (Tweet *tweet in tweets) {
+            //                NSString *text = tweet.text;
+            //                NSLog(@"%@", text);
+            //            }
+            [self.tableView reloadData];
+        } else {
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+        }
+        // Reload the tableView now that there is new data
+        [self.tableView reloadData];
+        // Tell the refreshControl to stop spinning
+        
+    }];
+    [refreshControl endRefreshing];
 }
 
 - (void)didReceiveMemoryWarning {

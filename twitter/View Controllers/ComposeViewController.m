@@ -11,6 +11,7 @@
 
 @interface ComposeViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *composeTextView;
+@property (weak, nonatomic) IBOutlet UILabel *counterLabel;
 
 @end
 
@@ -18,7 +19,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.composeTextView.delegate = self;
     // Do any additional setup after loading the view.
+    int characterLimit = 140;
+    self.counterLabel.text = [@(characterLimit) stringValue];
+    
 }
 - (IBAction)tweetButton:(id)sender {
     NSString *text = self.composeTextView.text;
@@ -46,5 +51,19 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+
+    // Set the max character limit
+    int characterLimit = 140;
+    
+    // Construct what the new text would be if we allowed the user's latest edit
+    NSString *newText = [self.composeTextView.text stringByReplacingCharactersInRange:range withString:text];
+    
+    // Update Character Count Label
+    self.counterLabel.text = [@(characterLimit - newText.length) stringValue];
+    // The new text should be allowed? True/False
+    return newText.length < characterLimit;
+}
 
 @end

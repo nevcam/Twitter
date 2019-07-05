@@ -14,6 +14,7 @@
 #import "ComposeViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "TweetDetailViewController.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 //1.table view as a subview
@@ -93,6 +94,7 @@
     cell.numRetweetsLabel.text = [@(tweet.retweetCount) stringValue];
     cell.numLikesLabel.text = [@(tweet.favoriteCount) stringValue];
     cell.numRepliesLabel.text = [@(tweet.replyCount) stringValue];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }
@@ -104,9 +106,20 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    UINavigationController *navigationController = [segue destinationViewController];
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+    if([segue.identifier  isEqual: @"composeSegue"]) {
+        UINavigationController *navigationController = [segue destinationViewController];
+        ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+    } else if ([segue.identifier  isEqual: @"detailSegue"]) {
+            UITableViewCell *tappedCell = sender;
+            NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+            Tweet *tweet = self.tweets[indexPath.row];
+            TweetDetailViewController *tweetDetailViewController = [segue destinationViewController];
+            tweetDetailViewController.tweet = tweet;
+    } else {
+        
+    }
+    
 }
 
 - (void)didTweet:(nonnull Tweet *)tweet {

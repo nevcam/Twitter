@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<ComposeViewControllerDelegate> delegate;
 //- (void)didTweet:(Tweet *)tweet;
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 @end
 
 NS_ASSUME_NONNULL_END

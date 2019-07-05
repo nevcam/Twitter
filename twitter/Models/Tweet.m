@@ -8,6 +8,7 @@
 
 #import "Tweet.h"
 #import "User.h"
+#import "DateTools.h"
 
 @implementation Tweet
 
@@ -47,7 +48,16 @@
         formatter.dateStyle = NSDateFormatterShortStyle;
         formatter.timeStyle = NSDateFormatterNoStyle;
         // Convert Date to String
-        self.createdAtString = [formatter stringFromDate:date];
+//        NSDate *dateTimeAgo = date.shortTimeAgoSinceNow;
+        self.createdAtString = date.shortTimeAgoSinceNow;
+//        self.createdAtString = [formatter stringFromDate:date];
+//        NSDate dateWithTimeInterval:<#(NSTimeInterval)#> sinceDate:date
+//        NSDate *timeAgoDate = [NSDate dateWithTimeIntervalSinceNow:-4];
+//        NSDate *timeAgo = [NSDate timeAgoSinceDate:date];
+        
+//        NSLog(@"Time Ago: %@", timeAgoDate.timeAgoSinceNow);
+//        NSLog(@"Time Ago: %@", date.shortTimeAgoSinceNow);
+//        NSLog(@"Time ago new: %@", timeAgo);
     }
     return self;
 }

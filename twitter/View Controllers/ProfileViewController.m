@@ -90,6 +90,7 @@
     NSURL *profileBannerPhotoURL = [NSURL URLWithString:fullPhotoBannerURLString];
     self.bannerView.image = nil;
     [self.bannerView setImageWithURL:profileBannerPhotoURL];
+    self.tweetCountLabel.text = self.user.tweetCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

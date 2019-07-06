@@ -62,7 +62,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Auto Layout took me a long time to figure out, however it was very rewarding when I finally finished it.
 
 ## Credits
 

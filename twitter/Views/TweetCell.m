@@ -12,15 +12,20 @@
 
 @implementation TweetCell
 
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    UITapGestureRecognizer *profileTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(didTapUserProfile:)];
+    [self.profilePhoto addGestureRecognizer:profileTapGestureRecognizer];
+    [self.profilePhoto setUserInteractionEnabled:YES];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+    
 }
 - (IBAction)didTapRetweet:(id)sender {
     if(self.tweet.retweeted) {
@@ -107,5 +112,10 @@
     
 }
 
+- (void) didTapUserProfile:(UITapGestureRecognizer *)sender{
+    // TODO: Call method on delegate
+    [self.delegate tweetCell:self didTap:self.tweet.user];
+    
+}
 
 @end

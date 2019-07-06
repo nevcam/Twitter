@@ -21,5 +21,8 @@
 - (void)unfavorite:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion;
 - (void)unretweet:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion;
 - (void)retweet:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion;
+- (void)getUserTimelineWithCompletion:(void(^)(NSArray *tweet, NSError *error))completion;
+- (void)getOtherUserTimelineWithCompletion:(User *)user completion:(void(^)(NSArray *tweets, NSError *error)) completion;
+- (void)getUserDetails:(void(^)(NSDictionary *userDetails, NSError *error))completion;
 
 @end

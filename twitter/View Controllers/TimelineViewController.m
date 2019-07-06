@@ -15,11 +15,13 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "TweetDetailViewController.h"
+#import "UserViewController.h"
 
-@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, TweetCellDelegate>
 //1.table view as a subview
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *tweets;
+@property (assign, nonatomic) BOOL isMoreDataLoading;
 
 @end
 
@@ -76,7 +78,7 @@
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
     //Set tweet labels
     Tweet *tweet = self.tweets[indexPath.row];
-    
+    cell.delegate = self;
     cell.tweet = tweet;
     cell.authorLabel.text = tweet.user.name;
     NSString *at = @"@";
@@ -116,9 +118,16 @@
             Tweet *tweet = self.tweets[indexPath.row];
             TweetDetailViewController *tweetDetailViewController = [segue destinationViewController];
             tweetDetailViewController.tweet = tweet;
-    } else {
-        
     }
+    else if ([segue.identifier  isEqual: @"userProfileSegue"]){
+        UITableViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+        Tweet *tweet = self.tweets[indexPath.row];
+        User *user = tweet.user;
+        UserViewController *userViewController = [segue destinationViewController];
+        userViewController.user = user;
+    }
+    else {}
     
 }
 
@@ -136,6 +145,30 @@
     appDelegate.window.rootViewController = loginViewController;
     // clear out the access tokens
     [[APIManager shared] logout];
+}
+
+
+- (void)tweetCell:(TweetCell *)tweetCell didTap:(User *)user{
+    // TODO: Perform segue to profile view controller
+    [self performSegueWithIdentifier:@"userProfileSegue" sender:user];
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    // Handle scroll behavior here
+    if(!self.isMoreDataLoading){
+        // Calculate the position of one screen length before the bottom of the results
+        int scrollViewContentHeight = self.tableView.contentSize.height;
+        int scrollOffsetThreshold = scrollViewContentHeight - self.tableView.bounds.size.height;
+        
+        // When the user has scrolled past the threshold, start requesting
+        if(scrollView.contentOffset.y > scrollOffsetThreshold && self.tableView.isDragging) {
+            self.isMoreDataLoading = true;
+            [self getTimeLine];
+            
+        }
+        
+    }
 }
 
 

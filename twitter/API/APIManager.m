@@ -142,4 +142,71 @@ static NSString * const consumerSecret = @"7n17iVdwnEjAtzJM4dT8jW8pSUeiIWWjJj2Eh
     }];
 }
 
+- (void)getUserTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
+    
+    [self GET:@"1.1/statuses/user_timeline.json"
+   parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
+       
+       // Manually cache the tweets. If the request fails, restore from cache if possible.
+       NSData *data = [NSKeyedArchiver archivedDataWithRootObject:tweetDictionaries];
+       [[NSUserDefaults standardUserDefaults] setValue:data forKey:@"usertimeline_tweets"];
+       
+       NSMutableArray *tweets  = [Tweet tweetsWithArray:tweetDictionaries];
+       //5.complerion handler passing back data
+       completion(tweets, nil);
+       
+   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+       
+       NSArray *tweetDictionaries = nil;
+       
+       // Fetch tweets from cache if possible
+       NSData *data = [[NSUserDefaults standardUserDefaults] valueForKey:@"usertimeline_tweets"];
+       if (data != nil) {
+           tweetDictionaries = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+       }
+       
+       completion(tweetDictionaries, error);
+   }];
+}
+
+- (void)getOtherUserTimelineWithCompletion:(User *)user completion:(void(^)(NSArray *tweets, NSError *error)) completion{
+    NSDictionary *parameters = @{@"screen_name": user.screenName};
+    [self GET:@"1.1/statuses/user_timeline.json"
+   parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
+       
+       // Manually cache the tweets. If the request fails, restore from cache if possible.
+       NSData *data = [NSKeyedArchiver archivedDataWithRootObject:tweetDictionaries];
+       [[NSUserDefaults standardUserDefaults] setValue:data forKey:@"usertimeline_tweets"];
+
+       NSMutableArray *tweets  = [Tweet tweetsWithArray:tweetDictionaries];
+       //5.complerion handler passing back data
+       completion(tweets, nil);
+
+   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+
+       NSArray *tweetDictionaries = nil;
+
+       // Fetch tweets from cache if possible
+       NSData *data = [[NSUserDefaults standardUserDefaults] valueForKey:@"usertimeline_tweets"];
+       if (data != nil) {
+           tweetDictionaries = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+       }
+
+       completion(tweetDictionaries, error);
+   }];
+}
+
+- (void)getUserDetails:(void(^)(NSDictionary *userDetails, NSError *error))completion {
+    
+    [self GET:@"1.1/account/settings.json"
+   parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable userDictionaries) {
+       
+       completion(userDictionaries, nil);
+       
+   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+
+       completion(nil, error);
+   }];
+}
+
 @end

@@ -1,5 +1,5 @@
 //
-//  ProfileViewController.h
+//  UserViewController.h
 //  twitter
 //
 //  Created by nev on 7/5/19.
@@ -7,17 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "User.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ProfileViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIImageView *bannerView;
+@interface UserViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIImageView *profilePhotoView;
+@property (strong, nonatomic) User *user;
 @property (weak, nonatomic) IBOutlet UILabel *authorLabel;
-@property (weak, nonatomic) IBOutlet UILabel *handleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *screenNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bioLabel;
 @property (weak, nonatomic) IBOutlet UILabel *followingCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *followerCountLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *bannerImageView;
 
 @end
 

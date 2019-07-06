@@ -1,66 +1,37 @@
 //
-//  ProfileViewController.m
+//  UserViewController.m
 //  twitter
 //
 //  Created by nev on 7/5/19.
 //  Copyright © 2019 Emerson Malca. All rights reserved.
 //
 
-#import "ProfileViewController.h"
+#import "UserViewController.h"
+#import "UIImageView+AFNetworking.h"
 #import "APIManager.h"
 #import "Tweet.h"
 #import "TweetCell.h"
-#import "UIImageView+AFNetworking.h"
 #import "AppDelegate.h"
 #import "TweetDetailViewController.h"
-#import "User.h"
 
-@interface ProfileViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface UserViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *tweets;
-@property (nonatomic, strong) NSDictionary *userDeets;
-@property (nonatomic, strong) NSString *userScreenName;
-@property (nonatomic, strong) User *user;
 
 @end
 
-@implementation ProfileViewController
+@implementation UserViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    
-//    - (void)getUserDetails:(void(^)(NSArray *userDetails, NSError *error))completion
-    [[APIManager shared] getUserDetails:^(NSDictionary *userDetails, NSError *error) {
-        self.userDeets = userDetails;
-        if (self.userDeets) {
-            NSLog(@"😎😎😎 Successfully got user deets");
-            NSLog(@"Here are the user deets: %@", self.userDeets);
-            self.userScreenName = self.userDeets[@"screen_name"];
-            NSLog(@"Here is the screenname: %@", self.userScreenName);
-        } else {
-            NSLog(@"😫😫😫 Error getting user deets: %@", error.localizedDescription);
-        }
-    }];
-    
-    
-    [[APIManager shared] getUserTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
+    [[APIManager shared] getOtherUserTimelineWithCompletion:self.user completion:^(NSArray *tweets, NSError *error) {
         //6.store data
         self.tweets = tweets;
-//        self.authorLabel = 
         if (tweets) {
             NSLog(@"😎😎😎 Successfully loaded home timeline");
-            for(Tweet* tweet in tweets) {
-                if(tweet.user.screenName == self.userScreenName){
-                    self.user = tweet.user;
-                    NSLog(@"here is your user %@", self.user.name);
-                    [self loadScreen];
-                    break;
-                }
-            }
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
@@ -68,18 +39,19 @@
         [self.tableView reloadData];
     }];
     
-    [self loadScreen];
-}
-
-- (void)loadScreen {
-    self.authorLabel.text = self.user.name;
-    self.handleLabel.text = self.user.screenName;
-    self.bioLabel.text = self.user.bioLabel;
     
+    self.authorLabel.text = self.user.name;
+    NSString *at = @"@";
+    NSString *fullHandle = [at stringByAppendingString:self.user.screenName];
+    
+    self.screenNameLabel.text = fullHandle;
+//    self.bioLabel.text = self.user.description;
     NSString *followerCount = self.user.followersCount;
     self.followerCountLabel.text = followerCount;
     NSString *followingCount = self.user.followingCount;
     self.followingCountLabel.text = followingCount;
+    
+    self.bioLabel.text = self.user.bioLabel;
     
     NSString *fullPhotoURLString = self.user.profileImageURLString;
     NSURL *profilePhotoURL = [NSURL URLWithString:fullPhotoURLString];
@@ -88,10 +60,19 @@
     
     NSString *fullPhotoBannerURLString = self.user.profileBannerURLString;
     NSURL *profileBannerPhotoURL = [NSURL URLWithString:fullPhotoBannerURLString];
-    self.bannerView.image = nil;
-    [self.bannerView setImageWithURL:profileBannerPhotoURL];
+    self.bannerImageView.image = nil;
+    [self.bannerImageView setImageWithURL:profileBannerPhotoURL];
 }
 
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.tweets.count;
 }
@@ -123,18 +104,5 @@
     
     return cell;
 }
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-
 
 @end

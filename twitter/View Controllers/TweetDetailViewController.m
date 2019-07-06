@@ -41,7 +41,7 @@
     self.profilePhotoView.image = nil;
     [self.profilePhotoView setImageWithURL:profilePhotoURL];
     
-    self.dateLabel.text = self.tweet.createdAtString;
+    self.dateLabel.text = self.tweet.longDate;
     self.retweetCountLabel.text = [@(self.tweet.retweetCount) stringValue];
     self.favCountLabel.text = [@(self.tweet.favoriteCount) stringValue];
 }

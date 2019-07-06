@@ -154,22 +154,5 @@
 }
 
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    // Handle scroll behavior here
-    if(!self.isMoreDataLoading){
-        // Calculate the position of one screen length before the bottom of the results
-        int scrollViewContentHeight = self.tableView.contentSize.height;
-        int scrollOffsetThreshold = scrollViewContentHeight - self.tableView.bounds.size.height;
-        
-        // When the user has scrolled past the threshold, start requesting
-        if(scrollView.contentOffset.y > scrollOffsetThreshold && self.tableView.isDragging) {
-            self.isMoreDataLoading = true;
-            [self getTimeLine];
-            
-        }
-        
-    }
-}
-
 
 @end

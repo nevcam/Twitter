@@ -107,15 +107,9 @@
 				6AD278FF20BCBF280085BC29 /* Views */,
 				6AD278F720BCB6900085BC29 /* API */,
 				6AD278F820BCBC140085BC29 /* Models */,
-				D90A207F22CF296F00DD9BE5 /* TweetDetailViewController.h */,
-				D90A208022CF296F00DD9BE5 /* TweetDetailViewController.m */,
 				6AD278D820BC4B950085BC29 /* AppDelegate.h */,
 				6AD278D920BC4B950085BC29 /* AppDelegate.m */,
 				6AD278DE20BC4B950085BC29 /* Main.storyboard */,
-				D961492B22CFF1C300991DFD /* UserViewController.h */,
-				D961492C22CFF1C300991DFD /* UserViewController.m */,
-				D961492522CF434900991DFD /* ProfileViewController.h */,
-				D961492622CF434900991DFD /* ProfileViewController.m */,
 				D90A207922CADC5F00DD9BE5 /* TweetCell.h */,
 				D90A207A22CADC5F00DD9BE5 /* TweetCell.m */,
 				6AD278E120BC4B970085BC29 /* Assets.xcassets */,
@@ -164,6 +158,12 @@
 				6AD2790820BCC04D0085BC29 /* TimelineViewController.m */,
 				D90A207C22CC1E1E00DD9BE5 /* ComposeViewController.h */,
 				D90A207D22CC1E1E00DD9BE5 /* ComposeViewController.m */,
+				D90A207F22CF296F00DD9BE5 /* TweetDetailViewController.h */,
+				D90A208022CF296F00DD9BE5 /* TweetDetailViewController.m */,
+				D961492B22CFF1C300991DFD /* UserViewController.h */,
+				D961492C22CFF1C300991DFD /* UserViewController.m */,
+				D961492522CF434900991DFD /* ProfileViewController.h */,
+				D961492622CF434900991DFD /* ProfileViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";

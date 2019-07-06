@@ -22,6 +22,7 @@
         self.followersCount = [NSString stringWithFormat:@"%@", dictionary[@"followers_count"] ];
         self.followingCount = [NSString stringWithFormat:@"%@", dictionary[@"friends_count"] ];
         self.bioLabel = dictionary[@"description"];
+        self.tweetCount = [NSString stringWithFormat:@"%@", dictionary[@"statuses_count"] ];
         
     }
     return self;
